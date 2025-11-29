@@ -1,0 +1,260 @@
+/* === Base / global styles === */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #f9fafb;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  border-radius: 0.5rem;
+}
+
+a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Shared row / card styles */
+
+.row {
+  /* Grid container instead of flexbox */
+  display: grid;
+
+  /* NEW: gap
+     Adds consistent spacing between grid rows and columns. */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  /* Mobile-first: start with a single column stack */
+  grid-template-columns: 1fr;
+}
+
+.row article {
+  background: #111827;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 1px solid #1f2933;
+}
+
+.row h2,
+.row h3,
+.row h4 {
+  margin-top: 0;
+}
+
+.row ul {
+  padding-left: 1.25rem;
+}
+
+/* Some small visual tweaks per special cards */
+.hero img {
+  margin-top: 0.5rem;
+}
+
+.info-card {
+  background: #020617;
+}
+
+.mini-card h4 {
+  margin-bottom: 0.5rem;
+}
+
+/* ======================================
+   TABLET LAYOUT (~768px and up)
+   ====================================== */
+
+@media (min-width: 768px) {
+  /* Row 1: 2 columns on tablet */
+  .row-1 {
+    /* NEW: repeat() + minmax()
+       Creates 2 equal flexible columns that shrink and grow evenly. */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Row 2: also 2 equal columns on tablet */
+  .row-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Row 3: show both cards side by side equally */
+  .row-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Row 4: still just one column card, centered by wrapper */
+  .row-4 {
+    grid-template-columns: 1fr;
+  }
+
+  /* Row 5: use grid-template-areas so we can reorder later easily */
+  .row-5 {
+    /* 2-column layout on tablet */
+    grid-template-columns: 1fr 1fr;
+
+    /* NEW: grid-template-areas
+       Names logical regions; layout is controlled by these strings. */
+    grid-template-areas:
+      "center center"
+      "left   right";
+  }
+
+  .row-5 .info-left {
+    grid-area: left;
+  }
+
+  .row-5 .info-center {
+    grid-area: center;
+  }
+
+  .row-5 .info-right {
+    grid-area: right;
+  }
+
+  /* Row 6: responsive grid using auto-fit */
+  .row-6 {
+    /* NEW: repeat(auto-fit, minmax(220px, 1fr))
+       auto-fit creates as many columns as can fit.
+       Each column is at least 220px and at most 1fr (sharing remaining space). */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+    /* NEW: grid-auto-flow: dense
+       Tries to back-fill gaps by moving smaller items up, like Tetris. */
+    grid-auto-flow: dense;
+
+    /* NEW: place-items
+       Shorthand for align-items + justify-items.
+       Here we stretch content to fill each grid cell. */
+    place-items: stretch;
+  }
+
+  /* Make the first mini-card stand out a bit */
+  .row-6 .mini-card:first-child {
+    /* Spans 2 columns when space allows */
+    grid-column: span 2;
+  }
+}
+
+/* ======================================
+   DESKTOP LAYOUT (~1024px and up)
+   ====================================== */
+
+@media (min-width: 1024px) {
+  /* Row 1: 4 equal columns on desktop */
+  .row-1 {
+    /* repeat(4, minmax(0, 1fr)) = classic 4-column grid */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Row 2: conceptually 4-column grid, but each .col-2 spans 2 columns */
+  .row-2 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .row-2 .col-2 {
+    /* Each card spans 2 of the 4 columns, so 2 cards fill the row. */
+    grid-column: span 2;
+  }
+
+  /* Row 3: 1-col wide card + 3-col wide feature card */
+  .row-3 {
+    grid-template-columns: 1fr 3fr;
+  }
+
+  .row-3 .feature-small {
+    grid-column: 1 / 2;
+  }
+
+  .row-3 .feature-large {
+    grid-column: 2 / 3;
+  }
+
+  /* Row 4: think of it as a 4-column grid with hero spanning all */
+  .row-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .row-4 .hero {
+    /* NEW: grid-column: 1 / -1
+       Spans from the first grid line to the last (full width). */
+    grid-column: 1 / -1;
+  }
+
+  /* Row 5: 1-col + 2-col + 1-col on desktop */
+  .row-5 {
+    /* Fractions make the middle card twice as wide as side cards. */
+    grid-template-columns: 1fr 2fr 1fr;
+
+    /* Re-define grid areas for desktop: left-center-right. */
+    grid-template-areas: "left center right";
+  }
+
+  .row-5 .info-left {
+    grid-area: left;
+  }
+
+  .row-5 .info-center {
+    grid-area: center;
+  }
+
+  .row-5 .info-right {
+    grid-area: right;
+  }
+
+  /* Row 6: allow more columns on bigger screens */
+  .row-6 {
+    /* auto-fit + smaller min width so more cards can fit in a row */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+/* ======================================
+   EXTRA: MOBILE-SPECIFIC ORDERING (Row 5)
+   ====================================== */
+
+@media (max-width: 767px) {
+  .row-5 {
+    grid-template-columns: 1fr;
+
+    /* Stack center first, then left, then right on mobile */
+    grid-template-areas:
+      "center"
+      "left"
+      "right";
+
+    /* NEW: justify-items
+       Controls horizontal alignment of content inside the grid cells. */
+    justify-items: stretch;
+  }
+
+  .row-5 .info-left {
+    grid-area: left;
+  }
+
+  .row-5 .info-center {
+    grid-area: center;
+  }
+
+  .row-5 .info-right {
+    grid-area: right;
+  }
+}
